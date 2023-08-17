@@ -15,13 +15,13 @@ The Cbox is monitored and managed using the [SNMP](https://en.wikipedia.org/wiki
 ---
 ### Technologies
 <li>
-Java 11
+Java 17
 <li>
 MySQL
 <li>
-Spring Boot
+Spring Boot 3
 <li>
-Spring Security
+Spring Security 6
 <li>
 Spring MVC
 <li>

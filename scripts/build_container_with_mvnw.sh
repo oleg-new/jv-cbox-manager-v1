@@ -1,5 +1,5 @@
 #!/bin/bash
-IMAGE_NAME=olegnew/cbox-manager:v1
+IMAGE_NAME=olegnew/cbox-manager:v1.3
 
 pushd ../
 

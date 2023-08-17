@@ -2,9 +2,9 @@ services:
   mysql:
     image: 'mysql:latest'
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      - 'MYSQL_DATABASE=cbox_db'
+      - 'MYSQL_PASSWORD=cboxpass'
+      - 'MYSQL_ROOT_PASSWORD=passwordverysecret'
+      - 'MYSQL_USER=cbox'
     ports:
-      - '3306'
+      - '13306'

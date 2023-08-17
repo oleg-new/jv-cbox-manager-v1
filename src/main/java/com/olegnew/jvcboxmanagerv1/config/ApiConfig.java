@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 description = "oleg_new", version = "1.0.0",
                 contact = @Contact(
                         name = "Poteleschenko Oleg",
-                        url = "http://www.phillip-kruger.com",
+                        url = "https://github.com/oleg-new/jv-cbox-manager-v1",
                         email = "olegpoteleschenko@gmail.com"
                 )
         ),
