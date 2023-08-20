@@ -8,6 +8,7 @@ services:
 
   my-mysql:
     image: mysql:8.0
+    restart: always
     environment:
         MYSQL_ROOT_USER: root
         MYSQL_ROOT_PASSWORD: rootpaswd
@@ -22,6 +23,7 @@ services:
 
   cbox-app:
     image: olegnew/cbox-manager:v1.4
+    restart: always
     ports:
       - 8080:8080
     network_mode: host

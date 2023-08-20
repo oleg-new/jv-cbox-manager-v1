@@ -8,6 +8,7 @@ import com.olegnew.jvcboxmanagerv1.model.cbox.FullInformation;
 import com.olegnew.jvcboxmanagerv1.service.cbox.CboxService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -48,7 +50,9 @@ public class CboxController {
                     description = "List all Cboxs",
                     content = {
                             @Content(
-                                    mediaType = "application/json")
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation =
+                                            CboxResponseDto.class)))
                     })
     })
     @GetMapping("/")
@@ -60,7 +64,7 @@ public class CboxController {
         return cboxResponseDtoList;
     }
 
-    @Operation(summary = "Get Cbox by ID", tags = "User Controller")
+    @Operation(summary = "Get Cbox by ID", tags = "Cbox Controller")
     @Schema(title = "Get Cbox by ID")
     @ApiResponses(value = {
             @ApiResponse(
@@ -68,14 +72,16 @@ public class CboxController {
                     description = "Found Cbox by Id",
                     content = {
                             @Content(
-                                    mediaType = "application/json"),
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            FullInformationResponseDto.class))
                     })
     })
     @GetMapping("/{id}")
     public FullInformationResponseDto getById(@PathVariable
+                                                  @RequestParam(name = "Cbox ID",
+                                                          required = true)
                                                   @Parameter(
-                                                          name = "Cbox ID",
-                                                          required = true,
                                                           description = "ID of the Cbox  "
                                                                   + "you are looking for",
                                                           example = "1")
@@ -98,14 +104,20 @@ public class CboxController {
                             + " {list of values received from device}",
                     content = {
                             @Content(
-                                    mediaType = "application/json")
-                    })
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            FullInformationResponseDto.class))
+                    }),
+            @ApiResponse(responseCode = "400", description =
+                    "Invalid Cbox parameter", content = @Content),
+            @ApiResponse(responseCode = "404", description =
+                    "No Cbox found", content = @Content)
     })
     @PostMapping("/add")
     public FullInformationResponseDto add(@RequestBody
+                                              @RequestParam(
+                                                      required = true)
                                               @Parameter(
-                                                      name = "User ",
-                                                      required = true,
                                                       description = "Data other than default Cbox, "
                                                               + "street, house,"
                                                               + "{list of values to be "
@@ -130,9 +142,10 @@ public class CboxController {
     })
     @PostMapping("/reboot")
     public String reboot(@RequestBody
-                             @Parameter(
+                             @RequestParam(
                                      name = "Cbox ID",
-                                     required = true,
+                                     required = true)
+                         @Parameter(
                                      description = "ID of the Cbox to be Rebooted",
                                      example = "2")
                              Long id) {
@@ -150,26 +163,28 @@ public class CboxController {
                             + "{list of values received from device}",
                     content = {
                             @Content(
-                                    mediaType = "application/json"),
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            FullInformationResponseDto.class))
                     })
     })
     @PatchMapping("/update/{id}")
-    public FullInformationResponseDto update(@Valid @PathVariable
-                                                 @Parameter(
+    public FullInformationResponseDto update(@Valid
+                                                 @RequestParam(
                                                          name = "Cbox ID",
-                                                         required = true,
-                                                         description = "ID of the Cbox "
-                                                                 + "to be upated",
-                                                         example = "1")String id,
+                                                         required = true)
+                                                 @Parameter(description = "ID of the Cbox "
+                                                         + "to be upated",
+                                                         example = "2")String id,
                                              @RequestBody
+                                             @RequestParam(name = "User",
+                                                     required = true)
                                              @Parameter(
-                                                     name = "User",
-                                                     required = true,
                                                      description = "Updated Data other "
                                                              + "than current Cbox, street, house, "
                                                              + "{list of values to be "
                                                      + "set on the device}")
-                                             FullInformationRequestDto
+                                             @PathVariable FullInformationRequestDto
                                                      fullInformationRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // only the OERATOR can get information about the "community"
@@ -194,9 +209,10 @@ public class CboxController {
     })
     @DeleteMapping("/{id}")
     public void delete(@PathVariable
-                           @Parameter(
+                           @RequestParam(
                                    name = "Cbox ID",
-                                   required = true,
+                                   required = true)
+                       @Parameter(
                                    description = "ID of the Cbox to be deleted",
                                    example = "2")
                            Long id) {

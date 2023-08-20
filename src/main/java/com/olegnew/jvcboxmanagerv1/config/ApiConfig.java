@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 )
         ),
         servers = {
-                @Server(url = "http://localhost:8080/v1/",description = "localhost")
+                @Server(url = "http://localhost:8080/",description = "localhost")
         }
 )
 public class ApiConfig {

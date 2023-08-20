@@ -7,6 +7,7 @@ import com.olegnew.jvcboxmanagerv1.service.RoleService;
 import com.olegnew.jvcboxmanagerv1.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -48,7 +50,9 @@ public class UserController {
                     description = "List all Users",
                     content = {
                             @Content(
-                                    mediaType = "application/json")
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation =
+                                            UserResponseDto.class)))
                     })
     })
     @GetMapping("/")
@@ -68,14 +72,16 @@ public class UserController {
                     description = "Found user by Id",
                     content = {
                             @Content(
-                                    mediaType = "application/json"),
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserResponseDto.class))
                     })
     })
     @GetMapping("/{id}")
-    public UserResponseDto getById(@Valid @PathVariable
+    public UserResponseDto getById(@PathVariable
+                                       @RequestParam(
+                                               name = "User_ID",
+                                               required = true)
                                        @Parameter(
-                                               name = "User ID",
-                                               required = true,
                                                description = "ID of the user you are looking for",
                                                example = "1")
                                        Long id) {
@@ -91,14 +97,15 @@ public class UserController {
                     description = "User ID, User name and ROLE List",
                     content = {
                             @Content(
-                                    mediaType = "application/json")
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserResponseDto.class))
                     })
     })
     @PostMapping("/add")
     public UserResponseDto add(@Valid @RequestBody
+                                   @RequestParam(
+                                           required = true)
                                    @Parameter(
-                                           name = "User ",
-                                           required = true,
                                            description = "User name, password and ROLE List")
                                    UserRequestDto userRequestDto) {
         userRequestDto.setRoles(userRequestDto.getRoles().stream()
@@ -116,22 +123,33 @@ public class UserController {
                     description = "Updated User name, password and ROLE List",
                     content = {
                             @Content(
-                                    mediaType = "application/json"),
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserResponseDto.class))
                     })
     })
     @PutMapping("/update/{id}")
     public UserResponseDto update(@Valid @PathVariable
-                                      @Parameter(
+                                      @RequestParam(
                                               name = "User ID",
-                                              required = true,
+                                              required = true)
+                                      @Parameter(
                                               description = "ID of the user to be upated",
                                               example = "1") Long id,
                                   @RequestBody
-                                  @Parameter(
+                                  @RequestParam(
                                           name = "User",
-                                          required = true,
+                                          required = true)
+                                  @Parameter(
                                           description = "User name, password and list of roles",
-                                          example = "1")
+                                          example = "{\"name\":\"User\",\n"
+                                                  + " \"password\":\"VeryComplexPassword\",\n"
+                                                  + " \"roles\":\n"
+                                                  + "     [{\n"
+                                                  + "         \"roleName\":\"ROLE_OPERATOR\"\n"
+                                                  + "         }\n"
+                                                  + "     ]\n"
+                                                  + " \n"
+                                                  + "}")
                                   UserRequestDto userRequestDto) {
         User user = modelMapper.map(userRequestDto, User.class);
         user.setId(id);
@@ -151,9 +169,10 @@ public class UserController {
     })
     @DeleteMapping("/{id}")
     public void delete(@PathVariable
-                           @Parameter(
+                           @RequestParam(
                                    name = "User ID",
-                                   required = true,
+                                   required = true)
+                           @Parameter(
                                    description = "ID of the user to be deleted",
                                    example = "1")
                            Long id) {

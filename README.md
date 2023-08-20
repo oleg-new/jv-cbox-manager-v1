@@ -7,11 +7,20 @@
 This application allows you to manage Cbox devices using the http protocol.
 The "[Ethernet Control Box](http://dlab.od.ua/ustrojstva-avtomatiki-monitoringa-i-signalizacii/#N2)" device is a multifunctional  device designed for protection, remote control of network equipment (switches, routers, modems, etc.) and control of various equipment.
 The Cbox is monitored and managed using the [SNMP](https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol) protocol.
+To run the application, just download the "[docker-compose.yml](https://github.
+com/oleg-new/jv-cbox-manager-v1/blob/master/docker-compose.yml)" file and run the "docker 
+compose up" command in the directory with the "[docker-compose.yml](https://github.
+com/oleg-new/jv-cbox-manager-v1/blob/master/docker-compose.yml)" file, Default Login: dmin, 
+Password: admin.
 ---
 Данное  приложение позволяет управлять устройствами Cbox  использовать протокол http.
 Устройство "[Ethernet Control Box](http://dlab.od.ua/ustrojstva-avtomatiki-monitoringa-i-signalizacii/#N2)" это многофункциональное устройство предназначеное для охраны, удалённого контроля работоспособности сетевого оборудования (коммутаторы, маршрутизаторы, модемы и т.п.) и управления различным оборудованием.
 Контроль и управление Cbox осуществляется  помощью протокола [SNMP](https://ru.wikipedia.org/wiki/SNMP).
-
+Для запуска приложения достаточно загрузить файл "[docker-compose.yml](https://github.
+com/oleg-new/jv-cbox-manager-v1/blob/master/docker-compose.yml)" и выполнить команду "docker 
+compose up" в каталоге с файлом "[docker-compose.yml](https://github.
+com/oleg-new/jv-cbox-manager-v1/blob/master/docker-compose.yml)". Default Login: dmin,
+Password: admin.
 ---
 ### Technologies
 <li>
@@ -28,6 +37,8 @@ Spring MVC
 Spring Data 
 <li>
 SNMP4J
+<li>
+Docker
 <li>
 Swagger
 <li>
