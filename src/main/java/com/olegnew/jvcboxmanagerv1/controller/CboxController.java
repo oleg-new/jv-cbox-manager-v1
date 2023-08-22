@@ -114,16 +114,19 @@ public class CboxController {
                     "No Cbox found", content = @Content)
     })
     @PostMapping("/add")
-    public FullInformationResponseDto add(@RequestBody
-                                              @RequestParam(
-                                                      required = true)
-                                              @Parameter(
-                                                      description = "Data other than default Cbox, "
-                                                              + "street, house,"
-                                                              + "{list of values to be "
-                                                              + "set on the device}")
-                                              FullInformationRequestDto
-                                                      fullInformationRequestDto) {
+    public FullInformationResponseDto add(
+            @RequestBody
+            @Parameter(
+                    description = "Data other than default Cbox"
+                            + ", street, house,"
+                            + "{list of values to be "
+                            + "set on the device}",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation =
+                                    FullInformationRequestDto.class)))
+            FullInformationRequestDto
+                    fullInformationRequestDto) {
         FullInformation fullInformation = modelMapper.map(fullInformationRequestDto,
                 FullInformation.class);
         return modelMapper.map(cboxService.add(fullInformation),FullInformationResponseDto.class);
@@ -141,9 +144,8 @@ public class CboxController {
                     })
     })
     @PostMapping("/reboot")
-    public String reboot(@RequestBody
-                             @RequestParam(
-                                     name = "Cbox ID",
+    public String reboot(@RequestParam(
+                                     name = "Cbox_ID",
                                      required = true)
                          @Parameter(
                                      description = "ID of the Cbox to be Rebooted",
@@ -169,30 +171,33 @@ public class CboxController {
                     })
     })
     @PatchMapping("/update/{id}")
-    public FullInformationResponseDto update(@Valid
-                                                 @RequestParam(
-                                                         name = "Cbox ID",
-                                                         required = true)
-                                                 @Parameter(description = "ID of the Cbox "
-                                                         + "to be upated",
-                                                         example = "2")String id,
-                                             @RequestBody
-                                             @RequestParam(name = "User",
-                                                     required = true)
-                                             @Parameter(
-                                                     description = "Updated Data other "
-                                                             + "than current Cbox, street, house, "
-                                                             + "{list of values to be "
-                                                     + "set on the device}")
-                                             @PathVariable FullInformationRequestDto
-                                                     fullInformationRequestDto) {
+    public FullInformationResponseDto update(
+            @Valid
+            @RequestParam(
+                    name = "Cbox_ID",
+                    required = true)
+            @Parameter(description = "ID of the Cbox "
+                    + "to be upated",
+                    example = "2")Long id,
+            @RequestBody
+            @Parameter(
+                    description = "Updated Data other "
+                            + "than current Cbox, street, house,"
+                            + " {list of values to be "
+                            + "set on the device}",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation =
+                                    FullInformationRequestDto.class)))
+            FullInformationRequestDto
+                    fullInformationRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // only the OERATOR can get information about the "community"
         boolean hasOperatorRole = authentication.getAuthorities().stream()
                 .anyMatch(r -> r.getAuthority().equals("ROLE_OPERATOR"));
-        cboxService.updateById(Long.parseLong(id), modelMapper.map(fullInformationRequestDto,
+        cboxService.updateById(id, modelMapper.map(fullInformationRequestDto,
                 FullInformation.class), false);
-        return modelMapper.map(cboxService.getFullInformation(Long.parseLong(id), hasOperatorRole),
+        return modelMapper.map(cboxService.getFullInformation(id, hasOperatorRole),
                 FullInformationResponseDto.class);
     }
 
@@ -208,9 +213,8 @@ public class CboxController {
                     })
     })
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable
-                           @RequestParam(
-                                   name = "Cbox ID",
+    public void delete(@RequestParam(
+                                   name = "Cbox_ID",
                                    required = true)
                        @Parameter(
                                    description = "ID of the Cbox to be deleted",

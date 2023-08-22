@@ -102,12 +102,14 @@ public class UserController {
                     })
     })
     @PostMapping("/add")
-    public UserResponseDto add(@Valid @RequestBody
-                                   @RequestParam(
-                                           required = true)
-                                   @Parameter(
-                                           description = "User name, password and ROLE List")
-                                   UserRequestDto userRequestDto) {
+    public UserResponseDto add(
+            @Valid @RequestBody
+            @Parameter(
+                    description = "User name, password and ROLE List",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = UserRequestDto.class)))
+            UserRequestDto userRequestDto) {
         userRequestDto.setRoles(userRequestDto.getRoles().stream()
                 .map(r -> roleService.findRoleByRoleName(r.getRoleName()))
                 .collect(Collectors.toSet()));
@@ -128,29 +130,24 @@ public class UserController {
                     })
     })
     @PutMapping("/update/{id}")
-    public UserResponseDto update(@Valid @PathVariable
-                                      @RequestParam(
-                                              name = "User ID",
-                                              required = true)
-                                      @Parameter(
-                                              description = "ID of the user to be upated",
-                                              example = "1") Long id,
-                                  @RequestBody
-                                  @RequestParam(
-                                          name = "User",
-                                          required = true)
-                                  @Parameter(
-                                          description = "User name, password and list of roles",
-                                          example = "{\"name\":\"User\",\n"
-                                                  + " \"password\":\"VeryComplexPassword\",\n"
-                                                  + " \"roles\":\n"
-                                                  + "     [{\n"
-                                                  + "         \"roleName\":\"ROLE_OPERATOR\"\n"
-                                                  + "         }\n"
-                                                  + "     ]\n"
-                                                  + " \n"
-                                                  + "}")
-                                  UserRequestDto userRequestDto) {
+    public UserResponseDto update(
+            @Valid @RequestParam(
+                    name = "User_ID",
+                    required = true
+            )
+            @Parameter(
+                    description = "ID of the user to be upated",
+                    example = "2") Long id,
+            @RequestBody
+            @Parameter(
+                    description = "User name, password and list of roles",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = UserRequestDto.class)))
+            UserRequestDto userRequestDto) {
+        userRequestDto.setRoles(userRequestDto.getRoles().stream()
+                .map(r -> roleService.findRoleByRoleName(r.getRoleName()))
+                .collect(Collectors.toSet()));
         User user = modelMapper.map(userRequestDto, User.class);
         user.setId(id);
         return modelMapper.map(userService.update(user), UserResponseDto.class);
