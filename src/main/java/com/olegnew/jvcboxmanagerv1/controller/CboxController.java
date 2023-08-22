@@ -79,7 +79,7 @@ public class CboxController {
     })
     @GetMapping("/{id}")
     public FullInformationResponseDto getById(@PathVariable
-                                                  @RequestParam(name = "Cbox ID",
+                                                  @RequestParam(name = "Cbox_ID",
                                                           required = true)
                                                   @Parameter(
                                                           description = "ID of the Cbox  "

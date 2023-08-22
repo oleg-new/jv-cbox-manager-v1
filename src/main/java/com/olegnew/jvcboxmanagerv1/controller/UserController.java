@@ -165,9 +165,8 @@ public class UserController {
                     })
     })
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable
-                           @RequestParam(
-                                   name = "User ID",
+    public void delete(@RequestParam(
+                                   name = "User_ID",
                                    required = true)
                            @Parameter(
                                    description = "ID of the user to be deleted",
